@@ -1,0 +1,97 @@
+--- plmDCA_asymmetric.m	2019-09-23 15:28:49.081854412 -0600
++++ ../../bryce/plmDCA_asymmetric.m	2019-09-23 15:14:48.825904495 -0600
+@@ -35,7 +35,7 @@
+ %Minimization options
+     options.method='lbfgs'; %Minimization scheme. Default: 'lbfgs', 'cg' for conjugate gradient (use 'cg' if out of RAM).
+     options.Display='off';
+-    options.progTol=1e-7; %Threshold for when to terminate the descent. Default: 1e-9. 
++    options.progTol=1e-15; %Threshold for when to terminate the descent. Default: 1e-9. 
+ %A note on progTol: In our experiments on PFAM-families, a progTol of 1e-3 gave identical true-positive rates to 1e-9 (default), but with moderately shorter running time. Differences in the scores between progTol 1e-3 and 1e-9 showed up in the 3rd-4th decimal or so (which tends to matter little when ranking them). We here set 1e-7 to be on the safe side, but this can be raised to gain speed. If, however, one wishes to use the scores for some different application, or extract and use the parameters {h,J} directly, we recommend the default progTol 1e-9.
+ 
+     addpath(genpath(pwd))
+@@ -109,6 +109,10 @@
+         end
+     end
+ 
++%Extract the field estimates from w.
++    hh=w(1:q,:);
++    h=hh';
++
+ 
+ %A note on gauges: 
+ %The parameter estimates coming from g_r satisfy the gauge
+@@ -125,8 +129,21 @@
+         J1(:,:,l)=Jtemp1(:,:,l)-repmat(mean(Jtemp1(:,:,l)),q,1)-repmat(mean(Jtemp1(:,:,l),2),1,q)+mean(mean(Jtemp1(:,:,l)));
+ 	J2(:,:,l)=Jtemp2(:,:,l)-repmat(mean(Jtemp2(:,:,l)),q,1)-repmat(mean(Jtemp2(:,:,l),2),1,q)+mean(mean(Jtemp2(:,:,l)));
+     end
++
++
+ %Take J_ij as the average of the estimates from g_i and g_j.
+-    J=0.5*(J1+J2);
++    Jflat=0.5*(J1+J2);
++
++    J=zeros(N,N,q,q);
++    l=1;
++    for i=1:(N-1)
++        for j=(i+1):N
++            J(i,j,:,:)=Jflat(:,:,l);
++            J(j,i,:,:)=Jflat(:,:,l)';
++            l=l+1;
++        end
++    end
++
+ 
+ %Calculate frob. norms FN_ij.
+     NORMS=zeros(N,N); 
+@@ -145,13 +162,25 @@
+     norm_means=mean(NORMS)*N/(N-1);
+     norm_means_all=mean(mean(NORMS))*N/(N-1);
+     CORRNORMS=NORMS-norm_means'*norm_means/norm_means_all;
+-    output=[];
+-    for i=1:(N-1)
+-        for j=(i+1):N
+-            output=[output;[i,j,CORRNORMS(i,j)]];
+-        end
+-    end
+-    dlmwrite(outputfile,output,'precision',5)
++
++
++%Save variables in struct.
++    s.reweighting_threshold=reweighting_threshold;
++    s.q=q;
++    s.N=N;
++    s.B_with_id_seq=B_with_id_seq;
++    s.B=B;
++    s.B_eff=B_eff;
++    s.method = options.method;
++    s.progTol = options.progTol;
++    
++    s.h=h;
++    s.J=J;
++    s.frobenius_norm=NORMS;
++    s.score=CORRNORMS;
++
++%Save struct. Open as a dict using scipy.io.loadmat('filename.mat')
++    save(outputfile,'-struct','s');
+ end
+ 
+ 
+@@ -208,7 +237,7 @@
+             end
+         end
+     end
+-    q=max(max(Y));
++    q=22;  %Originally it was max(max(Y));
+ end
+ 
+ function x=letter2number(a)
+@@ -256,6 +285,9 @@
+             x=20;
+         case 'Y'
+             x=21;
++        case 'X'
++            x=22;
++
+         otherwise
+             x=1;
+     end
