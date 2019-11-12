@@ -68,10 +68,8 @@ class BlitsAndPottsRunner(threading.Thread):
         subprocess.run(hhblitsCommand)
 
         print("[%s] hhblits completed." % datetime.now())
-        hhmakeCommand = hmake + \
-         " -i " + a3mf + \
-         " -o " + hhmf
         print("[%s] hhmake running." % datetime.now())
+        hhmakeCommand = [hmake, '-i', a3mf, '-o', hhmf]
         subprocess.run(hhmakeCommand)
         print("[%s] hhmake completed." % datetime.now())
 
@@ -79,8 +77,9 @@ class BlitsAndPottsRunner(threading.Thread):
             print("[%s] potts running." % datetime.now())
             a2mf = s.out_dir + s.domain + ".a2m"
             matf = s.out_dir + s.domain + ".mat"
-            reformatCmd = "/hh-suite/scripts/reformat.pl " + \
-                a3mf + " " + a2mf
+            reformatCmd = ["/hh-suite/scripts/reformat.pl", a3mf, a2mf]
+            subprocess.run(reformatCmd)
+
             import plmDCA_asymmetric
             plmDCA_asymmetric.initialize_runtime(["-nodisplay"])
             p = plmDCA_asymmetric.initialize()
