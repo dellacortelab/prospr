@@ -62,7 +62,7 @@ class BlitsAndPottsRunner(threading.Thread):
         hhmf = s.out_dir + s.domain + ".hhm"
         hhrf = s.out_dir + s.domain + ".hhr"
         a3mf = s.out_dir + s.domain + ".a3m"
-        hhblitsCommand = [hbin, "-i", s.fasta, "-oa3m", amf, "-d",s.hhdb, "-o", hhrf]
+        hhblitsCommand = [hbin, "-i", s.fasta, "-oa3m", a3mf, "-d",s.hhdb, "-o", hhrf]
         hhblitsCommand.extend(s.hhoptions.split(" "))
 # naw, do subprocess and proper console outputs
         subprocess.run(hhblitsCommand)
