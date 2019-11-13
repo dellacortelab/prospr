@@ -95,7 +95,7 @@ class PsiblastManager:
         with ThreadPoolExecutor(max_workers=5) as ex:
             ex.map(GZipCall, zips)
 
-    def build_query(self, domain):
+    def build_query(self, domain, n_threads=1):
         dpath = pconf.basedir + domain + "/"
 # check to see if pssm file is there and if they want to use it
         if os.path.exists(dpath+ domain +".pssm"):
@@ -113,4 +113,6 @@ class PsiblastManager:
          "-evalue", "0.001",
          "-num_iterations", "3",
          "-save_pssm_after_last_round"]
+        if n_threads > 1:
+            cmd.extend(['-num_threads', '%d'%n_threads])
         subprocess.run(cmd)

@@ -51,7 +51,8 @@ class BlitsAndPottsRunner(threading.Thread):
         s.fasta = s.out_dir + domain + ".fasta"
         s.domain = domain
         s.hhdb = pconf.basedir + "hhblits/uniclust30_2018_08/uniclust30_2018_08"
-        s.hhoptions = " -e 0.01 -n 3 -B 100000 -Z 100000 -maxmem 4.0 -v 0"
+        n_threads = kwargs.pop("n_threads", 1)
+        s.hhoptions = " -e 0.01 -n 3 -B 100000 -Z 100000 -maxmem 4.0 -v 0 -cpu %d"%n_threads
         # overwrites defaults if passed in
         s.__dict__.update(kwargs)
 
