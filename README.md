@@ -7,10 +7,10 @@ This repository currently contains a democratized implementation of the AlphaFol
 The associated publication is currently under review, and can be found here on biorXiv: https://www.biorxiv.org/content/10.1101/830273v1   
 
 ProSPr is available as a Docker container. After installing Docker, run:   
-*docker run prospr/prospr*  
+`docker run prospr/prospr`  
 To build your own docker container after modifying this source code, run:   
-*docker build .*   
+`docker build .`   
 
-All of the data used to train the ProSPr models (~2TB) is publically accessible at https://byu.box.com/v/ProteinStructurePrediction   
+All of the data used to train the ProSPr models (~2TB) is publically accessible at https://files.physics.byu.edu/data/prospr/   
 
 Author contact: dennis.dellacorte@byu.edu
