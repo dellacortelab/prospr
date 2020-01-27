@@ -13,4 +13,11 @@ To build your own docker container after modifying this source code, run:
 
 All of the data used to train the ProSPr models (~2TB) is publically accessible at https://files.physics.byu.edu/data/prospr/   
 
+All files are hosted on our ftp server including code dependencies: https://files.physics.byu.edu/data/prospr/
+
+If you have difficulty using plmDCA, then you can download a pre-compiled python package for it.  It will require matlab 2018a or matlab redistributable 2018a to run (redistributable is free to download). The following command will download the installer and all data associated with plmDCA (linux and unix systems):
+
+wget --recursive --reject "index.html" https://files.physics.byu.edu/data/prospr/potts-code/
+
+
 Author contact: dennis.dellacorte@byu.edu
