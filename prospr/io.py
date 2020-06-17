@@ -64,7 +64,7 @@ class Sequence(object):
     
         line_counter = 0
     
-        start = findHashTag(data)-1
+        start = findHashTag(data)-1 #should be +5, will be fixed but involves network retraining - coming soon
     
         for x in range (0, NUM_ROW * 3):
             if x % 3 == 0:
