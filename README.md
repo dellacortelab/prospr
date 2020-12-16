@@ -2,10 +2,10 @@
 Wendy M. Billings, Bryce Hedelius, Todd Millecam, David Wingate, Dennis Della Corte   
 Brigham Young University     
 
-This repository currently contains a democratized implementation of the AlphaFold distance prediction network.  
+This repository currently contains a democratized implementation of the AlphaFold1 distance prediction network.  
 Please note that it is released under the LGPL-3.0 license.
 
-The associated publication is currently under review, and can be found here on biorXiv: https://www.biorxiv.org/content/10.1101/830273v2   
+The associated preprint can be found here on biorXiv: https://www.biorxiv.org/content/10.1101/830273v2   
 
 ProSPr is available as a Docker container. After installing Docker, run:   
 `docker run prospr/prospr`  
