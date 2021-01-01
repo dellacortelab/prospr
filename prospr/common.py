@@ -1,4 +1,5 @@
 import numpy as np
+import re
 
 def probability(n):
     try:
