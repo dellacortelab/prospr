@@ -24,6 +24,6 @@ For more information, run
 `python prospr.py -h`    
 to print the help text.   
 
-ProSPr is also available as a docker container...
+ProSPr will also available as a docker container.
 
 Contact: dennis.dellacorte@byu.edu
