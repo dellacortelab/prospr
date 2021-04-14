@@ -6,7 +6,7 @@ This repository contains an open-source protein distance prediction network, Pro
 
 The manuscript corresponding to this work is currently under preparation and will be released shortly.
 
-The preprint associated with a PREVIOUS VERSION () is available here: https://www.biorxiv.org/content/10.1101/830273v2  
+The preprint associated with a PREVIOUS VERSION (https://github.com/dellacortelab/prospr/tree/prospr1) is available here: https://www.biorxiv.org/content/10.1101/830273v2  
 
 All data required to reproduce the work are publicly acessible at https://files.physics.byu.edu/data/prospr/
 
