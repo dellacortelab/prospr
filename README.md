@@ -39,11 +39,13 @@ to print the help text.
 ### Docker
 Alternatively to conda, you can use Docker. To run the code in a Docker container, run the following after cloning this repository:
 ```
+cd prospr
 # Build the docker image
 docker build -t prospr-dev -f Dockerfile docker
 # Run a docker container interactively
-docker run -it --name myname-prospr-dev --rm prospr-dev
+docker run -it --name myname-prospr-dev --rm -v $(pwd):/code prospr-dev
 # Then, inside the docker container, make a prediction:
+cd code
 python3 prospr.py predict --a3m ./data/inputs/T1034.a3m
 # Or train a new network
 python3 prospr.py train
