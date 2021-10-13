@@ -48,7 +48,7 @@ dependencies:
   - libssh2=1.9.0
   - libstdcxx-ng=9.3.0
   - markdown=3.3.3
-  - matplotlib
+  - matplotlib=3.4.2
   - mkl=2020.2
   - ncurses=6.2
   - ninja=1.10.2

@@ -18,7 +18,7 @@ WARNING: The 2TB of data associated with the PREVIOUS PROSPR VERSION currently h
 
 After downloading the code, a conda environment with all required dependencies can be created by running    
 ```
-conda env create -f prospr-env.yml
+conda env create -f dependencies/prospr-env.yml
 ```   
 Once activated
 ```

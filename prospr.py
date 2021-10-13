@@ -17,6 +17,7 @@ predict_parser.add_argument('--a3m', help='If mode == predict, you must provide 
 predict_parser.add_argument('-o', '--output_dir', help='Output save directory for prediction pkl.', default='./data/predictions')
 predict_parser.add_argument('-n', '--network', help='ProSPr network(s) used to make prediction: all (default), a, b, or c', default='all')
 predict_parser.add_argument('--device', help='The index for the desired CUDA device', default=0)
+predict_parser.add_argument('--save', help='Whether to save prediction results', action='store_true')
 predict_parser.set_defaults(func=predict)
 
 eval_parser = subparsers.add_parser('evaluate')
@@ -26,6 +27,7 @@ eval_parser.add_argument('-o', '--output_dir', help='Output save directory for e
 eval_parser.add_argument('-n', '--network', help='ProSPr network(s) used to make prediction: all (default), a, b, or c', default='all')
 eval_parser.add_argument('--device', help='The index for the desired CUDA device', default=0)
 eval_parser.set_defaults(func=evaluate)
+eval_parser.set_defaults(save=False)
 
 train_parser = subparsers.add_parser('train')
 train_parser.add_argument('--crop_size', help='The sizes of crops to train on', default=64)
