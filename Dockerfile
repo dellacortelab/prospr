@@ -29,7 +29,7 @@ RUN cd /home && \
 RUN $HOME/miniconda/bin/conda init bash
 
 # Install hhblits
-RUN conda install -y -c conda-forge -c bioconda hhsuite
+RUN conda install -y -c conda-forge -c bioconda -c salilab hhsuite dssp
 
 # Install prospr dependencies
 RUN cd prospr && $HOME/miniconda/bin/conda env create -f prospr-env.yml
