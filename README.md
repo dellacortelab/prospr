@@ -41,7 +41,7 @@ Alternatively to conda, you can use Docker. To run the code in a Docker containe
 ```
 cd prospr
 # Build the docker image
-docker build -t prospr-dev -f Dockerfile docker
+docker build -t prospr-dev dependencies
 # Run a docker container interactively
 docker run -it --name myname-prospr-dev --rm -v $(pwd):/code prospr-dev
 # Then, inside the docker container, make a prediction:
