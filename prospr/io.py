@@ -1,6 +1,6 @@
 import pickle as pkl
 
-def save(arr,fileName):
+def save(arr, fileName):
     """save in pickle format"""
     fileObject = open(fileName, 'wb')
     pkl.dump(arr, fileObject)

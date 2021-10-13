@@ -83,19 +83,37 @@ def reweight(msa1hot, cutoff):
 
 
 class Sequence(object):
-    def __init__(self, a3m_file, **kwargs):
+    def __init__(self, a3m_file, subsample_hmm_percent=1.0, **kwargs):
         self.a3m_file = a3m_file
-        self.name = a3m_file.split('.a3m')[0]
+        self.name = os.path.basename(a3m_file.split('.a3m')[0])
+        self.subsample_hmm_percent = subsample_hmm_percent
 
     def build(self):
+        self.subsample_a3m()
         self.get_seq()
         self.make_hhm()
         self.fast_dca()
         os.system('rm '+self.hhm_file)
-    
+
+    def subsample_a3m(self):
+        if self.subsample_hmm_percent < 1.0:
+            subsample_a3m = os.path.basename(self.a3m_file) + '_subsample.a3m'
+            with open(self.a3m_file) as f:
+                lns = f.readlines()
+                n_msas = (len(lns) / 2) - 1 # 1st line is the sequence itself
+                selected_indices = np.random.choice(n_msas, size=n_msas*self.subsample_hmm_percent, replace=False)
+                with open(subsample_a3m, 'w') as out_file:
+                    # Write the sequence
+                    out_file.write(lns[:2])
+                    for i in selected_indices:
+                        out_file.write(lns[2*i:2*i+2])
+                self.a3m_file = subsample_a3m
+
     def get_seq(self):
+        
         with open(self.a3m_file) as f:
             lns = f.readlines()
+                
             #might not always be the second line in the file
             seq = ''
             l = 0

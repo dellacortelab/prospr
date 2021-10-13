@@ -10,6 +10,7 @@ dependencies:
   - _openmp_mutex=4.5
   - absl-py=0.11.0
   - astor=0.8.1
+  - biopython=1.79
   - c-ares=1.17.1
   - ca-certificates=2020.12.5
   - cached-property=1.5.1
@@ -45,6 +46,7 @@ dependencies:
   - libssh2=1.9.0
   - libstdcxx-ng=9.3.0
   - markdown=3.3.3
+  - matplotlib=3.4.3
   - mkl=2020.2
   - ncurses=6.2
   - ninja=1.10.2
