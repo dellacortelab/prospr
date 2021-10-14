@@ -43,7 +43,7 @@ cd prospr
 # Build the docker image
 docker build -t prospr-dev dependencies
 # Run a docker container interactively
-docker run -it --name myname-prospr-dev --rm -v $(pwd):/code prospr-dev
+docker run -it --gpus all --name myname-prospr-dev --rm -v $(pwd):/code prospr-dev
 # Then, inside the docker container, make a prediction:
 cd code
 python3 prospr.py predict --a3m ./data/inputs/T1034.a3m
