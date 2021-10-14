@@ -46,11 +46,11 @@ docker build -t prospr-dev dependencies
 docker run -it --gpus all --name myname-prospr-dev --rm -v $(pwd):/code prospr-dev
 # Then, inside the docker container, make a prediction:
 cd code
-python3 prospr.py predict --a3m ./data/inputs/T1034.a3m
+python3 prospr.py predict --a3m ./data/evaluate/T1034.a3m
 # Or train a new network
 python3 prospr.py train
 # Or evaluate an existing network
-python3 prospr.py evaluate --a3m ./data/inputs/T1034.a3m --pdb ./data/inputs/T1034-D1.pdb
+python3 prospr.py evaluate --a3m ./data/evaluate/T1034.a3m --pdb ./data/evaluate/T1034-D1.pdb
 ```
 
 Contact: dennis.dellacorte@byu.edu
