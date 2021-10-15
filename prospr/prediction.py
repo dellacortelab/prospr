@@ -99,7 +99,8 @@ def predict_domain(sequence, model, num_offsets=10, real_mask=True):
             input_vector[batch,:] = get_tensors(sequence, i=crop[0], j=crop[1]) 
             batch_crops.append(crop)
 
-        pred_dist, pred_aux_i, pred_aux_j = model(input_vector)
+        with torch.no_grad():
+            pred_dist, pred_aux_i, pred_aux_j = model(input_vector)
 
         batch_ss_i = pred_aux_i['ss'].cpu().detach().numpy()
         batch_ss_j = pred_aux_j['ss'].cpu().detach().numpy()
