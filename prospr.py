@@ -1,6 +1,10 @@
 
 import argparse
 from argparse import RawTextHelpFormatter
+import warnings
+warnings.simplefilter('ignore', FutureWarning)
+import os
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
 from prospr.train import train
 from prospr.prediction import predict
@@ -30,9 +34,11 @@ eval_parser.set_defaults(func=evaluate)
 eval_parser.set_defaults(save=False)
 
 train_parser = subparsers.add_parser('train')
+train_parser.add_argument('--base_data_path', help='Base file path for train data', default='./data')
 train_parser.add_argument('--crop_size', help='The sizes of crops to train on', default=64)
 train_parser.add_argument('--model_name', help='The name of the saved model', default='prospr_a')
 train_parser.add_argument('--device', help='The index for the desired CUDA device', default=0)
+train_parser.add_argument('--multi_model', help='Whether part of multiple-model training', action='store_true')
 train_parser.set_defaults(func=train)
 
 args = parser.parse_args()

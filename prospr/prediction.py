@@ -8,7 +8,7 @@ warnings.simplefilter(action='ignore', category=FutureWarning)
 
 from prospr.sequence import Sequence
 from prospr.io import save
-from prospr.dataloader import dataloader
+from prospr.dataloader import get_tensors
 from prospr.nn import ProsprNetwork, load_model, CUDA, CROP_SIZE, DIST_BINS, ANGLE_BINS, SS_BINS, ASA_BINS, INPUT_DIM
 
 IDEAL_BATCH_SIZE = 2 
@@ -47,9 +47,9 @@ def get_masks(shape=(64,64,64), real=True):
     return mask, mask[:,shape[1]//2,:], mask[:,:,shape[2]//2] 
 
 
-def predict_domain(data, model, num_offsets=10, real_mask=True):
+def predict_domain(sequence, model, num_offsets=10, real_mask=True):
     '''make prediction for entire protein domain via crop assembly and averaging'''
-    seq = data.seq
+    seq = sequence.seq
     seq_len = len(seq)
 
     # randomly select i,j pairs for grid offsets
@@ -96,7 +96,7 @@ def predict_domain(data, model, num_offsets=10, real_mask=True):
         batch_crops = []
         for batch in range(BATCH_SIZE):
             crop = crop_list.pop(0)
-            input_vector[batch,:] = dataloader(data, i=crop[0], j=crop[1]) 
+            input_vector[batch,:] = get_tensors(sequence, i=crop[0], j=crop[1]) 
             batch_crops.append(crop)
 
         pred_dist, pred_aux_i, pred_aux_j = model(input_vector)
@@ -242,7 +242,6 @@ def predict(args):
         # process = subprocess.Popen(cmd.split(), stdout=subprocess.PIPE)
         # output, error = process.communicate()
         # args.a3m = 'example.a3m'
-
     seq = Sequence(args.a3m)
     save_path = os.path.join(args.output_dir, seq.name+'_prediction.pkl')
 
@@ -265,7 +264,7 @@ def predict(args):
         prospr.to(CUDA)
         print('Model location:',next(prospr.parameters()).device)
         print('Making predictions...')
-        pred = predict_domain(data=seq, model=prospr)
+        pred = predict_domain(sequence=seq, model=prospr)
         prospr = None
 
         if total_pred == []:

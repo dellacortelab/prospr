@@ -5,8 +5,7 @@ import numpy as np
 import os
 
 from prospr.prediction import predict
-from prospr.dataloader import get_label
-
+from prospr.sequence import Sequence
 
 def make_plots(pred, label, base_save_path):
     """Create plots comparing distogram, secondary structure, phi/psi, and accessible surface area predictions to labels."""
@@ -95,5 +94,7 @@ def evaluate(args):
 
     args.save = False
     pred = predict(args)
-    label = get_label(args.pdb)
+    sequence = Sequence(args.a3m, include_labels=True)
+    sequence.build(args.pdb)
+    label = sequence.label_data
     make_plots(pred, label, base_save_path=base_save_path)

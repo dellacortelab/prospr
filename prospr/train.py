@@ -9,8 +9,13 @@ import time
 
 from prospr.io import save, load
 from prospr.nn import ProsprNetwork
-from prospr.dataloader import dataloader
+from prospr.dataloader import get_tensors
+from prospr.sequence import Sequence
 
+import warnings
+from Bio import BiopythonWarning
+warnings.simplefilter('ignore', BiopythonWarning)
+warnings.simplefilter('ignore', FutureWarning)
 # ** HELPER FUNCTIONS ** #
 
 def check_param(model):
@@ -29,7 +34,8 @@ def load_model(model, fname, device):
 
 def prep_domain(domain, mods, crop_size, data_path):
     # for epoch enumeration, load name2seq for whole training set
-    name2seq = load(data_path+'training-name2seq-EXPANDED_21may.pkl')#'TRAIN_name2seq.pkl')
+    name2seq = load(os.path.join(data_path, 'training-name2seq-small.pkl'))#'TRAIN_name2seq.pkl')
+    # name2seq = load(os.path.join(data_path, 'training-name2seq-EXPANDED_21may.pkl'))#'TRAIN_name2seq.pkl')
     
     seq = name2seq[domain]
     seq_len = len(seq)
@@ -70,9 +76,10 @@ def make_epoch_stack(training_list, model_name, mods, crop_size, epoch, log_path
         try:
             small_list = prep_domain(domain, mods, crop_size, data_path)
             big_list = big_list + small_list
-        except:
+        except Exception as e:
+            print(e)
             print(domain, 'could not be added to epoch crop list!')
-            with open(log_path + model_name + 'error_log.txt', 'a+') as f:
+            with open(os.path.join(log_path, model_name + 'error_log.txt'), 'a+') as f:
                 f.write(str(epoch) + '\t'+domain+'\t'+'could not be added to epoch crop list!\n')
     print('Epoch',epoch,'list has', len(big_list), 'total crops!')
     return big_list
@@ -96,7 +103,7 @@ def train(args):
     LEARNING_RATE = 0.001
 
     IDEAL_BATCH_SIZE = 6
-    NUM_EPOCHS = 100
+    NUM_EPOCHS = 5
 
     dist_loss_factor = 15
     ss_loss_factor = 0.5
@@ -136,11 +143,12 @@ def train(args):
             assert(len(thing) + i -1 == args.crop_size)
     print('Length check on start indices is good!')
 
-    data_path = '/data/ProSPr/data/training_data/' 
-    model_path = '/data/ProSPr/models/'
-    log_path = '/data/ProSPr/logs/'
+    data_path = os.path.join(args.base_data_path, 'training')
+    model_path = './nn'
+    log_path = os.path.join(args.base_data_path, 'logs')
 
-    training_list = load(data_path+'training-set-EXPANDED_21may.pkl')#'good_TRAIN_domains_apr29.pkl')
+    # training_list = load(os.path.join(data_path, 'training-set-EXPANDED_21may.pkl'))#'good_TRAIN_domains_apr29.pkl')
+    training_list = load(os.path.join(data_path, 'training-set-small.pkl'))
 
     p = ProsprNetwork()
 
@@ -153,7 +161,7 @@ def train(args):
     CRITERION = nn.CrossEntropyLoss()
     OPTIMIZER = optim.Adam(p.parameters(), lr=LEARNING_RATE )
 
-    print(check_param(p))
+    check_param(p)
 
     domain_path = data_path + 'current_epoch/SUB_'
 
@@ -174,7 +182,6 @@ def train(args):
 
         random.shuffle(training_list)
         crop_list = make_epoch_stack(training_list, model_name=args.model_name, mods=mods, crop_size=args.crop_size, epoch=epoch, log_path=log_path, data_path=data_path) #this contains ALL the crops for the WHOLE epoch!
-        current_domain = ''
         done = False 
     
         while not done:
@@ -203,13 +210,11 @@ def train(args):
                 for batch in range(BATCH_SIZE):
                     crop = crop_list.pop(0)
                     domain, i, j = crop
+                    
+                    sequence = Sequence(os.path.join(data_path, 'a3ms', domain + '.a3m'), include_labels=True)
+                    sequence.build(pdbfile=os.path.join(data_path, 'pdbs', domain + '.pdb'))
+                    iv, dist_label, aux_i_labels, aux_j_labels = get_tensors(sequence, i, j, train=True)
 
-                    # make sure the right data dict is open for use by dataloader
-                    if domain != current_domain:
-                        current_domain = domain
-                        data = load(domain_path+current_domain+'.pkl')
-
-                    iv, dist_label, aux_i_labels, aux_j_labels = dataloader(data, i, j, train=True)
                     batch_crop_info.append((domain,i,j))
                     input_vector[batch,:] = iv
                     labels_dist[batch,:] = dist_label
@@ -226,11 +231,13 @@ def train(args):
                     
                 take_step = True
 
-            except:
+            except Exception as e:
+                print(e)
                 #write to error log
+                import pdb; pdb.set_trace()
                 batch_desc = build_batch_string(batch_crop_info)
                 print('BATCH ASSEMBLY PROBLEM', batch_desc)
-                with open(log_path + args.model_name + 'error_log.txt', 'a+') as f:
+                with open(os.path.join(log_path, args.model_name + 'error_log.txt'), 'a+') as f:
                     f.write('BATCH ASSEMBLY PROBLEM' + '\t' +str(epoch) + '\t'+str(iteration)+'\t'+str(BATCH_SIZE)+'\t'+batch_desc+'\t'+domain+'\t'+str(i)+'\t'+str(j)+'\n')
                 #if ran into a problem, (shouldn't happen, but...) it will keep popping the next crop off util continues
                 
@@ -272,40 +279,42 @@ def train(args):
                     print(info)
 
                     #save losses in training log
-                    with open(log_path + args.model_name + 'loss_log.txt', 'a+') as f:
+                    with open(os.path.join(log_path, args.model_name + 'loss_log.txt'), 'a+') as f:
                         f.write(info+'\n')
 
                     #record batch crop information
                     batch_desc = build_batch_string(batch_crop_info)
-                    with open(log_path + args.model_name + 'crop_log.txt', 'a+') as f:
+                    with open(os.path.join(log_path, args.model_name + 'crop_log.txt'), 'a+') as f:
                         f.write(str(epoch) + '\t'+str(iteration)+'\t'+str(BATCH_SIZE)+'\t'+batch_desc+'\n')
 
                 except:
                     print('Error somewhere in taking optimization step!')
                     batch_desc = build_batch_string(batch_crop_info)
-                    with open(log_path + args.model_name + 'error_log.txt', 'a+') as f:
+                    with open(os.path.join(log_path, args.model_name + 'error_log.txt'), 'a+') as f:
                         f.write('OPTIMIZATION STEP PROBLEM'+'\t'+str(epoch) + '\t'+str(iteration)+'\t'+str(BATCH_SIZE)+'\t'+batch_desc+'\t'+domain+'\t'+str(i)+'\t'+str(j)+'\n')
 
                 iteration += 1
 
-        save_model(p, model_path+args.model_name+'EPOCH-END_'+str(epoch)+'.pt')
+        save_model(p, os.path.join(model_path, args.model_name+'EPOCH-END_'+str(epoch)+'.pt'))
         
-        #now do the new stuff to play nicely with training data generation also on ribo, automatically
-        # first make the ready file for this network
-        with open('./go_ahead/1.4-X_GO.txt', 'a+') as f:
-            f.write(' test ')
-        # now wait around until all three networks are done, and monitor_epochs.sh moves things around and deletes the go_ahead/ files
-        do_next_epoch = False
-        while not do_next_epoch:
-            n = len(os.listdir('./go_ahead/'))
-            if n > 0:
-                if n == 3:
-                    print('All three networks ready, waiting on training data...')
+        if args.multi_model:
+            #now do the new stuff to play nicely with training data generation also on ribo, automatically
+            # first make the ready file for this network
+            os.makedirs('./go_ahead', exist_ok=True)
+            with open('./go_ahead/1.4-X_GO.txt', 'a+') as f:
+                f.write(' test ')
+            # now wait around until all three networks are done, and monitor_epochs.sh moves things around and deletes the go_ahead/ files
+            do_next_epoch = False
+            while not do_next_epoch:
+                n = len(os.listdir('./go_ahead/'))
+                if n > 0:
+                    if n == 3:
+                        print('All three networks ready, waiting on training data...')
+                    else:
+                        print('Only ',n,'/3 networks ready for next epoch. Waiting....')
+                    time.sleep(WAIT_TIME)
+                elif n == 0:
+                    do_next_epoch = True
                 else:
-                    print('Only ',n,'/3 networks ready for next epoch. Waiting....')
-                time.sleep(WAIT_TIME)
-            elif n == 0:
-                do_next_epoch = True
-            else:
-                print('BIG PROBLEMS somehow have negative # of files in go_ahead/ ?????')
-        print('Everything ready for next epoch! Continuing on...')
+                    print('BIG PROBLEMS somehow have negative # of files in go_ahead/ ?????')
+            print('Everything ready for next epoch! Continuing on...')
