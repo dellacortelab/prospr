@@ -223,16 +223,16 @@ class Sequence(object):
 
     def subsample_a3m(self):
         if self.subsample_hmm_percent < 1.0:
-            subsample_a3m = os.path.basename(self.a3m_file) + '_subsample.a3m'
+            subsample_a3m = os.path.join(os.path.dirname(self.a3m_file), self.name + '_subsample.a3m')
             with open(self.a3m_file) as f:
                 lns = f.readlines()
-                n_msas = (len(lns) / 2) - 1 # 1st line is the sequence itself
-                selected_indices = np.random.choice(n_msas, size=n_msas*self.subsample_hmm_percent, replace=False)
+                n_msas = (len(lns) // 2) - 1 # 1st line is the sequence itself
+                selected_indices = np.random.choice(n_msas, size=int(n_msas*self.subsample_hmm_percent), replace=False)
                 with open(subsample_a3m, 'w') as out_file:
                     # Write the sequence
-                    out_file.write(lns[:2])
+                    out_file.write(''.join(lns[:2]))
                     for i in selected_indices:
-                        out_file.write(lns[2*i:2*i+2])
+                        out_file.write(''.join(lns[2*i:2*i+2]))
                 self.a3m_file = subsample_a3m
 
     def get_seq(self):

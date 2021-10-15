@@ -211,7 +211,7 @@ def train(args):
                     crop = crop_list.pop(0)
                     domain, i, j = crop
                     
-                    sequence = Sequence(os.path.join(data_path, 'a3ms', domain + '.a3m'), include_labels=True)
+                    sequence = Sequence(os.path.join(data_path, 'a3ms', domain + '.a3m'), subsample_hmm_percent=.5, include_labels=True)
                     sequence.build(pdbfile=os.path.join(data_path, 'pdbs', domain + '.pdb'))
                     iv, dist_label, aux_i_labels, aux_j_labels = get_tensors(sequence, i, j, train=True)
 
@@ -234,7 +234,6 @@ def train(args):
             except Exception as e:
                 print(e)
                 #write to error log
-                import pdb; pdb.set_trace()
                 batch_desc = build_batch_string(batch_crop_info)
                 print('BATCH ASSEMBLY PROBLEM', batch_desc)
                 with open(os.path.join(log_path, args.model_name + 'error_log.txt'), 'a+') as f:
