@@ -11,7 +11,7 @@ The preprint associated with a PREVIOUS VERSION (https://github.com/dellacortela
 All data required to reproduce the work are publicly acessible at https://files.physics.byu.edu/data/prospr/
 
 *************************************
-WARNING: The 2TB of data associated with the PREVIOUS PROSPR VERSION currently hosted on the ftp server WILL BE REMOVED ON 1 JUNE 2021. If you would like future access to the files, please download a local copy.
+WARNING: The 2TB of data associated with the PREVIOUS PROSPR VERSION currently hosted on the ftp server ARE SUBJECT TO BE REMOVED SOON. If you would like future access to the files, please download a local copy.
 *************************************
 
 ### Running ProSPr
