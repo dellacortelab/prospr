@@ -11,7 +11,7 @@ The preprint associated with a PREVIOUS VERSION (https://github.com/dellacortela
 All data required to reproduce the work are publicly acessible at https://files.physics.byu.edu/data/prospr/
 
 *************************************
-WARNING: The 2TB of data associated with the PREVIOUS PROSPR VERSION currently hosted on the ftp server WILL BE REMOVED ON 1 JUNE 2021. If you would like future access to the files, please download a local copy.
+WARNING: The 2TB of data associated with the PREVIOUS PROSPR VERSION currently hosted on the ftp server ARE SUBJECT TO BE REMOVED SOON. If you would like future access to the files, please download a local copy.
 *************************************
 
 ### Running ProSPr
@@ -23,11 +23,11 @@ conda env create -f dependencies/prospr-env.yml
 Once activated
 ```
 # Make a prediction:
-python3 prospr.py predict --a3m ./data/inputs/T1034.a3m
+python3 prospr.py predict --a3m ./data/evaluate/T1034.a3m
+
 # Or train a new network
 python3 prospr.py train
-# Or evaluate an existing network
-python3 prospr.py evaluate --a3m ./data/inputs/T1034.a3m --pdb ./data/inputs/T1034-D1.pdb
+
 ```
 For more information, run    
 ```
@@ -36,7 +36,7 @@ python3 prospr.py -h
 to print the help text.   
 
 
-### Docker
+### Docker (only limited tested)
 Alternatively to conda, you can use Docker. To run the code in a Docker container, run the following after cloning this repository:
 ```
 cd prospr
@@ -49,8 +49,6 @@ cd code
 python3 prospr.py predict --a3m ./data/evaluate/T1034.a3m
 # Or train a new network
 python3 prospr.py train
-# Or evaluate an existing network
-python3 prospr.py evaluate --a3m ./data/evaluate/T1034.a3m --pdb ./data/evaluate/T1034-D1.pdb
 ```
 
 Contact: dennis.dellacorte@byu.edu
