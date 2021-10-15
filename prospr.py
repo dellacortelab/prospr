@@ -39,6 +39,9 @@ train_parser.add_argument('--crop_size', help='The sizes of crops to train on', 
 train_parser.add_argument('--model_name', help='The name of the saved model', default='prospr_a')
 train_parser.add_argument('--device', help='The index for the desired CUDA device', default=0)
 train_parser.add_argument('--multi_model', help='Whether part of multiple-model training', action='store_true')
+train_parser.add_argument('--learning_rate_decrease_epochs', help="A list of two epochs at which the learning rate will decrease", nargs=2, type=int, default=[5, 15])
+train_parser.add_argument('--n_epochs', help="Number of epochs for training", type=int, default=100)
+train_parser.add_argument('--batch_size', help="Training batch size", type=int, default=6)
 train_parser.set_defaults(func=train)
 
 args = parser.parse_args()

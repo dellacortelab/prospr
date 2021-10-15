@@ -102,9 +102,6 @@ def train(args):
 
     LEARNING_RATE = 0.001
 
-    IDEAL_BATCH_SIZE = 6
-    NUM_EPOCHS = 5
-
     dist_loss_factor = 15
     ss_loss_factor = 0.5
     torsion_loss_factor = 0.25
@@ -165,20 +162,19 @@ def train(args):
 
     domain_path = data_path + 'current_epoch/SUB_'
 
-    for epoch in range(NUM_EPOCHS):
+    for epoch in range(args.n_epochs):
         print('Starting epoch',epoch)
-        if epoch == 5:
+        if epoch == args.learning_rate_decrease_epochs[0]:
             print('changing LR to 0.0005')
             LEARNING_RATE  = 0.0005
             OPTIMIZER = optim.Adam(p.parameters(), lr=LEARNING_RATE )
-        elif epoch == 15:
+        elif epoch == args.learning_rate_decrease_epochs[1]:
             print('changing LR to 0.0001')
             LEARNING_RATE  = 0.0001
             OPTIMIZER = optim.Adam(p.parameters(), lr=LEARNING_RATE )
 
         iteration = 0
-
-        BATCH_SIZE = IDEAL_BATCH_SIZE
+        batch_size = args.batch_size
 
         random.shuffle(training_list)
         crop_list = make_epoch_stack(training_list, model_name=args.model_name, mods=mods, crop_size=args.crop_size, epoch=epoch, log_path=log_path, data_path=data_path) #this contains ALL the crops for the WHOLE epoch!
@@ -188,26 +184,26 @@ def train(args):
             if len(crop_list) == 0:
                 done = True
                 break
-            if len(crop_list) < BATCH_SIZE:
-                BATCH_SIZE = len(crop_list)
+            if len(crop_list) < args.batch_size:
+                batch_size = len(crop_list)
                 done = True #because shouldn't repeat loop again afterwards (for this epoch)
         
             take_step = False
             try:
-                input_vector = torch.zeros([BATCH_SIZE,INPUT_DIM,args.crop_size,args.crop_size], dtype = torch.float, device=args.device)
-                labels_dist = torch.zeros([BATCH_SIZE,args.crop_size,args.crop_size], dtype=torch.long, device = args.device)
-                labels_ss_i = torch.zeros([BATCH_SIZE,args.crop_size], dtype=torch.long, device = args.device)
-                labels_ss_j = torch.zeros([BATCH_SIZE,args.crop_size], dtype=torch.long, device = args.device)
-                labels_phi_i = torch.zeros([BATCH_SIZE,args.crop_size], dtype=torch.long, device = args.device)
-                labels_phi_j = torch.zeros([BATCH_SIZE,args.crop_size], dtype=torch.long, device = args.device)
-                labels_psi_i = torch.zeros([BATCH_SIZE,args.crop_size], dtype=torch.long, device = args.device)
-                labels_psi_j = torch.zeros([BATCH_SIZE,args.crop_size], dtype=torch.long, device = args.device)
-                labels_asa_i = torch.zeros([BATCH_SIZE,args.crop_size], dtype=torch.long, device = args.device)
-                labels_asa_j = torch.zeros([BATCH_SIZE,args.crop_size], dtype=torch.long, device = args.device)
+                input_vector = torch.zeros([batch_size,INPUT_DIM,args.crop_size,args.crop_size], dtype = torch.float, device=args.device)
+                labels_dist = torch.zeros([batch_size,args.crop_size,args.crop_size], dtype=torch.long, device = args.device)
+                labels_ss_i = torch.zeros([batch_size,args.crop_size], dtype=torch.long, device = args.device)
+                labels_ss_j = torch.zeros([batch_size,args.crop_size], dtype=torch.long, device = args.device)
+                labels_phi_i = torch.zeros([batch_size,args.crop_size], dtype=torch.long, device = args.device)
+                labels_phi_j = torch.zeros([batch_size,args.crop_size], dtype=torch.long, device = args.device)
+                labels_psi_i = torch.zeros([batch_size,args.crop_size], dtype=torch.long, device = args.device)
+                labels_psi_j = torch.zeros([batch_size,args.crop_size], dtype=torch.long, device = args.device)
+                labels_asa_i = torch.zeros([batch_size,args.crop_size], dtype=torch.long, device = args.device)
+                labels_asa_j = torch.zeros([batch_size,args.crop_size], dtype=torch.long, device = args.device)
 
                 batch_crop_info = []
 
-                for batch in range(BATCH_SIZE):
+                for batch in range(batch_size):
                     crop = crop_list.pop(0)
                     domain, i, j = crop
                     
@@ -237,7 +233,7 @@ def train(args):
                 batch_desc = build_batch_string(batch_crop_info)
                 print('BATCH ASSEMBLY PROBLEM', batch_desc)
                 with open(os.path.join(log_path, args.model_name + 'error_log.txt'), 'a+') as f:
-                    f.write('BATCH ASSEMBLY PROBLEM' + '\t' +str(epoch) + '\t'+str(iteration)+'\t'+str(BATCH_SIZE)+'\t'+batch_desc+'\t'+domain+'\t'+str(i)+'\t'+str(j)+'\n')
+                    f.write('BATCH ASSEMBLY PROBLEM' + '\t' +str(epoch) + '\t'+str(iteration)+'\t'+str(batch_size)+'\t'+batch_desc+'\t'+domain+'\t'+str(i)+'\t'+str(j)+'\n')
                 #if ran into a problem, (shouldn't happen, but...) it will keep popping the next crop off util continues
                 
             if take_step:
@@ -284,13 +280,13 @@ def train(args):
                     #record batch crop information
                     batch_desc = build_batch_string(batch_crop_info)
                     with open(os.path.join(log_path, args.model_name + 'crop_log.txt'), 'a+') as f:
-                        f.write(str(epoch) + '\t'+str(iteration)+'\t'+str(BATCH_SIZE)+'\t'+batch_desc+'\n')
+                        f.write(str(epoch) + '\t'+str(iteration)+'\t'+str(batch_size)+'\t'+batch_desc+'\n')
 
                 except:
                     print('Error somewhere in taking optimization step!')
                     batch_desc = build_batch_string(batch_crop_info)
                     with open(os.path.join(log_path, args.model_name + 'error_log.txt'), 'a+') as f:
-                        f.write('OPTIMIZATION STEP PROBLEM'+'\t'+str(epoch) + '\t'+str(iteration)+'\t'+str(BATCH_SIZE)+'\t'+batch_desc+'\t'+domain+'\t'+str(i)+'\t'+str(j)+'\n')
+                        f.write('OPTIMIZATION STEP PROBLEM'+'\t'+str(epoch) + '\t'+str(iteration)+'\t'+str(batch_size)+'\t'+batch_desc+'\t'+domain+'\t'+str(i)+'\t'+str(j)+'\n')
 
                 iteration += 1
 
