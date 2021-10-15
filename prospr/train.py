@@ -79,7 +79,7 @@ def make_epoch_stack(training_list, model_name, mods, crop_size, epoch, log_path
         except Exception as e:
             print(e)
             print(domain, 'could not be added to epoch crop list!')
-            with open(os.path.join(log_path, model_name + 'error_log.txt'), 'a+') as f:
+            with open(os.path.join(log_path, model_name + '_error_log.txt'), 'a+') as f:
                 f.write(str(epoch) + '\t'+domain+'\t'+'could not be added to epoch crop list!\n')
     print('Epoch',epoch,'list has', len(big_list), 'total crops!')
     return big_list
@@ -232,7 +232,7 @@ def train(args):
                 #write to error log
                 batch_desc = build_batch_string(batch_crop_info)
                 print('BATCH ASSEMBLY PROBLEM', batch_desc)
-                with open(os.path.join(log_path, args.model_name + 'error_log.txt'), 'a+') as f:
+                with open(os.path.join(log_path, args.model_name + '_error_log.txt'), 'a+') as f:
                     f.write('BATCH ASSEMBLY PROBLEM' + '\t' +str(epoch) + '\t'+str(iteration)+'\t'+str(batch_size)+'\t'+batch_desc+'\t'+domain+'\t'+str(i)+'\t'+str(j)+'\n')
                 #if ran into a problem, (shouldn't happen, but...) it will keep popping the next crop off util continues
                 
@@ -274,23 +274,23 @@ def train(args):
                     print(info)
 
                     #save losses in training log
-                    with open(os.path.join(log_path, args.model_name + 'loss_log.txt'), 'a+') as f:
+                    with open(os.path.join(log_path, args.model_name + '_loss_log.txt'), 'a+') as f:
                         f.write(info+'\n')
 
                     #record batch crop information
                     batch_desc = build_batch_string(batch_crop_info)
-                    with open(os.path.join(log_path, args.model_name + 'crop_log.txt'), 'a+') as f:
+                    with open(os.path.join(log_path, args.model_name + '_crop_log.txt'), 'a+') as f:
                         f.write(str(epoch) + '\t'+str(iteration)+'\t'+str(batch_size)+'\t'+batch_desc+'\n')
 
                 except:
                     print('Error somewhere in taking optimization step!')
                     batch_desc = build_batch_string(batch_crop_info)
-                    with open(os.path.join(log_path, args.model_name + 'error_log.txt'), 'a+') as f:
+                    with open(os.path.join(log_path, args.model_name + '_error_log.txt'), 'a+') as f:
                         f.write('OPTIMIZATION STEP PROBLEM'+'\t'+str(epoch) + '\t'+str(iteration)+'\t'+str(batch_size)+'\t'+batch_desc+'\t'+domain+'\t'+str(i)+'\t'+str(j)+'\n')
 
                 iteration += 1
 
-        save_model(p, os.path.join(model_path, args.model_name+'EPOCH-END_'+str(epoch)+'.pt'))
+        save_model(p, os.path.join(model_path, args.model_name+'_EPOCH-END_'+str(epoch)+'.pt'))
         
         if args.multi_model:
             #now do the new stuff to play nicely with training data generation also on ribo, automatically
