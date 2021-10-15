@@ -23,11 +23,11 @@ conda env create -f dependencies/prospr-env.yml
 Once activated
 ```
 # Make a prediction:
-python3 prospr.py predict --a3m ./data/inputs/T1034.a3m
+python3 prospr.py predict --a3m ./data/evaluate/T1034.a3m
+
 # Or train a new network
 python3 prospr.py train
-# Or evaluate an existing network
-python3 prospr.py evaluate --a3m ./data/inputs/T1034.a3m --pdb ./data/inputs/T1034-D1.pdb
+
 ```
 For more information, run    
 ```
@@ -36,7 +36,7 @@ python3 prospr.py -h
 to print the help text.   
 
 
-### Docker
+### Docker (only limited tested)
 Alternatively to conda, you can use Docker. To run the code in a Docker container, run the following after cloning this repository:
 ```
 cd prospr
@@ -49,8 +49,6 @@ cd code
 python3 prospr.py predict --a3m ./data/evaluate/T1034.a3m
 # Or train a new network
 python3 prospr.py train
-# Or evaluate an existing network
-python3 prospr.py evaluate --a3m ./data/evaluate/T1034.a3m --pdb ./data/evaluate/T1034-D1.pdb
 ```
 
 Contact: dennis.dellacorte@byu.edu
