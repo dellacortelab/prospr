@@ -4,7 +4,8 @@ Brigham Young University
 
 This repository contains an open-source protein distance prediction network, ProSPr, released under the MIT license.
 
-The manuscript corresponding to this work is currently under preparation and will be released shortly.
+The manuscript corresponding to this work is available here:
+https://www.biorxiv.org/content/10.1101/2021.10.14.464472v1
 
 The preprint associated with a PREVIOUS VERSION (https://github.com/dellacortelab/prospr/tree/prospr1) is available here: https://www.biorxiv.org/content/10.1101/830273v2  
 
