@@ -9,6 +9,9 @@ https://www.biorxiv.org/content/10.1101/2021.10.14.464472v1
 
 The preprint associated with a PREVIOUS VERSION (https://github.com/dellacortelab/prospr/tree/prospr1) is available here: https://www.biorxiv.org/content/10.1101/830273v2  
 
+A comparative study of ProSPr, trRosetta, and AlphaFold is available here:
+Billings, W.M., Morris, C.J. & Della Corte, D. The whole is greater than its parts: ensembling improves protein contact prediction. Sci Rep 11, 8039 (2021). https://doi.org/10.1038/s41598-021-87524-0
+
 All data required to reproduce the work are publicly acessible at https://files.physics.byu.edu/data/prospr/
 
 *************************************
