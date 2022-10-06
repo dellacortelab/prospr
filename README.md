@@ -19,7 +19,6 @@ python3 prospr.py predict --a3m ./data/evaluate/T1034.a3m
 
 # Or train a new network
 python3 prospr.py train
-
 ```
 For more information, run    
 ```
