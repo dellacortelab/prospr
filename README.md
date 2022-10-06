@@ -1,6 +1,6 @@
 # ProSPr: Protein Structure Prediction
 
-![alt text](https://github.com/dellacortelab/prospr/blob/master/data/results/T1034/dist_pred_label.png?raw=true)
+<img src="https://github.com/dellacortelab/prospr/blob/master/data/results/T1034/dist_pred_label.png?raw=true" alt="drawing" width="350"/>
 
 This repository contains an open-source protein distance prediction network, ProSPr, released under the MIT license.
 
@@ -47,11 +47,9 @@ Wendy Billings, Jacob Stern, Bryce Hedelius, Todd Millecam, David Wingate, Denni
 Brigham Young University
 
 The manuscript corresponding to this work is available here:
-https://www.biorxiv.org/content/10.1101/2021.10.14.464472v1
+[Evaluation of Deep Neural Network ProSPr for Accurate Protein Distance Predictions on CASP14 Targets](https://www.mdpi.com/1422-0067/22/23/12835)
 
-The preprint associated with a PREVIOUS VERSION (https://github.com/dellacortelab/prospr/tree/prospr1) is available here: https://www.biorxiv.org/content/10.1101/830273v2  
+The preprint associated with a PREVIOUS VERSION (https://github.com/dellacortelab/prospr/tree/prospr1) is available here: https://www.biorxiv.org/content/10.1101/830273v2
 
 A comparative study of ProSPr, trRosetta, and AlphaFold is available here:
 Billings, W.M., Morris, C.J. & Della Corte, D. The whole is greater than its parts: ensembling improves protein contact prediction. Sci Rep 11, 8039 (2021). https://doi.org/10.1038/s41598-021-87524-0
-
-All data required to reproduce the work are publicly acessible at https://files.physics.byu.edu/data/prospr/
