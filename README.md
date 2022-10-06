@@ -1,5 +1,7 @@
 # ProSPr: Protein Structure Prediction
 
+Distance map prediction (above diagonal) vs. ground truth (below diagonal) for CASP14 target T1034.
+
 <img src="https://github.com/dellacortelab/prospr/blob/master/data/results/T1034/dist_pred_label.png?raw=true" alt="drawing" width="350"/>
 
 This repository contains an open-source protein distance prediction network, ProSPr, released under the MIT license.
