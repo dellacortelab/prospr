@@ -42,11 +42,6 @@ python3 prospr.py predict --a3m ./data/evaluate/T1034.a3m
 python3 prospr.py train
 ```
 
-Contact: dennis.dellacorte@byu.edu
-
-Wendy Billings, Jacob Stern, Bryce Hedelius, Todd Millecam, David Wingate, Dennis Della Corte   
-Brigham Young University
-
 The manuscript corresponding to this work is available here:
 [Evaluation of Deep Neural Network ProSPr for Accurate Protein Distance Predictions on CASP14 Targets](https://www.mdpi.com/1422-0067/22/23/12835)
 
@@ -63,3 +58,8 @@ ARTICLE-NUMBER = {12835},
 URL = {https://www.mdpi.com/1422-0067/22/23/12835},
 PubMedID = {34884640}
 ```
+Authors: 
+Wendy Billings, Jacob Stern, Bryce Hedelius, Todd Millecam, David Wingate, Dennis Della Corte   
+Brigham Young University
+
+Contact: dennis.dellacorte@byu.edu
