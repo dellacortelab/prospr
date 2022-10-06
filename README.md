@@ -50,7 +50,16 @@ Brigham Young University
 The manuscript corresponding to this work is available here:
 [Evaluation of Deep Neural Network ProSPr for Accurate Protein Distance Predictions on CASP14 Targets](https://www.mdpi.com/1422-0067/22/23/12835)
 
-The preprint associated with a PREVIOUS VERSION (https://github.com/dellacortelab/prospr/tree/prospr1) is available here: https://www.biorxiv.org/content/10.1101/830273v2
-
-A comparative study of ProSPr, trRosetta, and AlphaFold is available here:
-Billings, W.M., Morris, C.J. & Della Corte, D. The whole is greater than its parts: ensembling improves protein contact prediction. Sci Rep 11, 8039 (2021). https://doi.org/10.1038/s41598-021-87524-0
+To cite:
+```
+@Article{ijms222312835,
+AUTHOR = {Stern, Jacob and Hedelius, Bryce and Fisher, Olivia and Billings, Wendy M. and Della Corte, Dennis},
+TITLE = {Evaluation of Deep Neural Network ProSPr for Accurate Protein Distance Predictions on CASP14 Targets},
+JOURNAL = {International Journal of Molecular Sciences},
+VOLUME = {22},
+YEAR = {2021},
+NUMBER = {23},
+ARTICLE-NUMBER = {12835},
+URL = {https://www.mdpi.com/1422-0067/22/23/12835},
+PubMedID = {34884640}
+```
